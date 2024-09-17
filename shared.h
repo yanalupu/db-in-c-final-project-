@@ -7,7 +7,7 @@
 
 int select_from_table(FILE *file, void *buffer, size_t size, int count);
 void insert_into_table(FILE *file, void *record, size_t size);
-void update_record_in_table(FILE *file, int id, void *record);
-void delete_record_from_table(FILE *file, int id);
+void update_record_in_table(FILE *file, int id, void *record, size_t size);
+void delete_from_table(FILE *file, int id, size_t size);
 
-#endif
+#endif // SHARED_H

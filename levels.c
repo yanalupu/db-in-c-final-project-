@@ -3,7 +3,7 @@
 #include "levels.h"
 #include "db_structs.h"
 
-void select_levels(FILE *file) {
+void select_all_levels(FILE *file) {
     if (!file) {
         fprintf(stderr, "File pointer is NULL\n");
         return;
@@ -28,12 +28,12 @@ void select_levels(FILE *file) {
     }
 }
 
-void update_level(FILE *file, int level_number, struct Level *level) {
+void update_single_level(FILE *file, int level_number, struct Level *level) {
     fseek(file, level_number * sizeof(struct Level), SEEK_SET);
     fwrite(level, sizeof(struct Level), 1, file);
 }
 
-void delete_level(FILE *file, int level_number) {
+void delete_single_level(FILE *file, int level_number) {
     struct Level level;
     fseek(file, level_number * sizeof(struct Level), SEEK_SET);
     fread(&level, sizeof(struct Level), 1, file);

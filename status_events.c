@@ -1,4 +1,4 @@
-#include <stdio.h>  // Для FILE
+#include <stdio.h>
 #include <stdlib.h>
 #include "status_events.h"
 #include "shared.h"
@@ -31,7 +31,7 @@ void select_all_status_events(FILE *file) {
     }
 }
 
-void insert_status_event(FILE *file, void *event) {
+void insert_status_event(FILE *file, struct StatusEvent *event) {
     printf("Inserting status event...\n");
     insert_into_table(file, event, sizeof(struct StatusEvent));
 }
@@ -45,7 +45,7 @@ void delete_status_event(FILE *file, int event_id) {
     struct StatusEvent event;
     fseek(file, event_id * sizeof(struct StatusEvent), SEEK_SET);
     fread(&event, sizeof(struct StatusEvent), 1, file);
-    // No delete_flag in StatusEvent structure
+    // Нет поля delete_flag в StatusEvent
     fseek(file, event_id * sizeof(struct StatusEvent), SEEK_SET);
     fwrite(&event, sizeof(struct StatusEvent), 1, file);
 }

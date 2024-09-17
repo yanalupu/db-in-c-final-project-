@@ -3,7 +3,7 @@
 #include "modules.h"
 #include "db_structs.h"
 
-void select_modules(FILE *file) {
+void select_all_modules(FILE *file) {
     if (!file) {
         fprintf(stderr, "File pointer is NULL\n");
         return;
@@ -35,7 +35,7 @@ void update_module(FILE *file, int id, struct Module *module) {
     fwrite(module, sizeof(struct Module), 1, file);
 }
 
-void delete_module(FILE *file, int id) {
+void delete_module(FILE *file, int id){
     struct Module module;
     fseek(file, id * sizeof(struct Module), SEEK_SET);
     fread(&module, sizeof(struct Module), 1, file);
