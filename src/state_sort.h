@@ -11,17 +11,13 @@ typedef struct Rows {
   int second;
   int status;
   int code;
-} ROWS;
-void input_path(char *path, int *err);
-void input_number(int *num_menu, int *err);
-void get_size_of_binary_file(char *path, long int *size, int *err);
-void output(ROWS *row, FILE *file, int *ptr, char *path, long int size,
-            int count_struct);
-void print_row(int *ptr, int count_struct);
-void read_row(FILE *file, long int row, int *ptr, int count_struct);
-void write_row(FILE *file, long int row, int *ptr, int count_struct);
-void fast_sort(FILE *file, int **ptr, long int left, long int right,
-               int count_struct);
-void swap_rows(FILE *file, long int row0, long int row1, int **ptr,
-               int count_struct);
+} ROW;
+
+void output(const char *path);
+void sort(const char *path);
+void add_record(const char *path);
+void read_row(FILE *file, long int row, ROW *row_data);
+void print_row(const ROW *row_data);
+long int get_file_size(const char *path);
+int compare_rows(const void *a, const void *b);
 #endif

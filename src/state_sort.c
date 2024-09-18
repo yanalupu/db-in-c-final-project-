@@ -1,64 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-// Определение структуры ROW
-typedef struct {
-    int year;
-    int month;
-    int day;
-    int hour;
-    int minute;
-    int second;
-    int status;
-    int code;
-} ROW;
-
-// Прототипы функций
-void output(const char *path);
-void sort_and_output(const char *path);
-void add_record(const char *path);
-void read_row(FILE *file, long int row, ROW *row_data);
-void print_row(const ROW *row_data);
-long int get_file_size(const char *path);
-int compare_rows(const void *a, const void *b);
+#include "state_sort.h"
 
 int main(void) {
     char path[300];
     int num_menu = -1;
 
-    // Чтение пути к файлу
     if (scanf("%s", path) != 1) {
         printf("n/a\n");
         return 0;
     }
 
-    // Чтение номера меню
     if (scanf("%d", &num_menu) != 1) {
         printf("n/a\n");
         return 0;
     }
 
-    // Обработка выбранного пункта меню
     switch (num_menu) {
         case 0:
-            output(path);  // Вывод содержимого файла
+            output(path); 
             break;
         case 1:
-            sort_and_output(path);  // Сортировка и вывод отсортированных данных
+            sort(path);  
             break;
         case 2:
-            add_record(path); // Добавление записи
-            sort_and_output(path);  // Сортировка после добавления
+            add_record(path); 
+            sort(path);  
             break;
         default:
-            printf("n/a\n");   // Если выбран некорректный пункт меню
+            printf("n/a\n");   
             break;
     }
 
     return 0;
 }
 
-// Функция для вывода данных из файла
 void output(const char *path) {
     FILE *file = fopen(path, "rb");
     if (!file) {
@@ -83,8 +59,8 @@ void output(const char *path) {
     fclose(file);
 }
 
-// Функция для сортировки данных в памяти и их вывода
-void sort_and_output(const char *path) {
+
+void sort(const char *path) {
     FILE *file = fopen(path, "rb");
     if (!file) {
         printf("n/a\n");
@@ -98,7 +74,6 @@ void sort_and_output(const char *path) {
         return;
     }
 
-    // Выделение памяти для данных
     ROW *rows = malloc(size * sizeof(ROW));
     if (!rows) {
         printf("n/a\n");
@@ -106,26 +81,21 @@ void sort_and_output(const char *path) {
         return;
     }
 
-    // Чтение данных из файла в массив
     for (long int i = 0; i < size; i++) {
         read_row(file, i, &rows[i]);
     }
     fclose(file);
 
-    // Сортировка данных
     qsort(rows, size, sizeof(ROW), compare_rows);
 
-    // Вывод отсортированных данных
     for (long int i = 0; i < size; i++) {
         print_row(&rows[i]);
         printf("\n");
     }
 
-    // Освобождение выделенной памяти
     free(rows);
 }
 
-// Функция для добавления новой записи в файл
 void add_record(const char *path) {
     FILE *file = fopen(path, "ab");
     if (!file) {
@@ -152,13 +122,11 @@ void add_record(const char *path) {
     fclose(file);
 }
 
-// Функция для чтения строки из файла
 void read_row(FILE *file, long int row, ROW *row_data) {
     fseek(file, row * sizeof(ROW), SEEK_SET);
     fread(row_data, sizeof(ROW), 1, file);
 }
 
-// Функция для вывода строки
 void print_row(const ROW *row_data) {
     printf("%d %d %d %d %d %d %d %d",
            row_data->year, row_data->month, row_data->day,
@@ -166,7 +134,6 @@ void print_row(const ROW *row_data) {
            row_data->status, row_data->code);
 }
 
-// Функция для получения размера файла
 long int get_file_size(const char *path) {
     FILE *file = fopen(path, "rb");
     if (!file) {
@@ -179,7 +146,6 @@ long int get_file_size(const char *path) {
     return size;
 }
 
-// Функция для сравнения записей (используется qsort)
 int compare_rows(const void *a, const void *b) {
     const ROW *row1 = (const ROW *)a;
     const ROW *row2 = (const ROW *)b;
